@@ -1,0 +1,10 @@
+outputs/
+__pycache__/
+data/ 
+*.py[cod]
+*$py.class
+*.xlsx
+*.csv
+.env
+.venv/
+src/sem_modeling.py

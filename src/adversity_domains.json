@@ -1,0 +1,133 @@
+{
+    "Asset_deprivation_childhood": [
+        "msoc_elec_0",
+        "msoc_wat_0",
+        "msoc_runn_0",
+        "msoc_bath_0",
+        "msoc_line_0",
+        "msoc_ref_0",
+        "msoc_wash_0",
+        "msoc_tv_0",
+        "msoc_rad_0",
+        "msoc_comp_0",
+        "msoc_inter_0",
+        "msoc_smrt_0",
+        "msoc_sound_0",
+        "msoc_car_0",
+        "msoc_bedr_0",
+        "msoc_ob1_0",
+        "msoc_ob2_0",
+        "msoc_ob3_0",
+        "msoc_ob4_0",
+        "msoc_ob5_0"
+    ],
+    "Basic_needs_childhood": [
+        "msoc_fin_0",
+        "msoc_prov_period___1",
+        "msoc_prov_period___2",
+        "msoc_eat_0",
+        "msoc_bal_0",
+        "msoc_bas_0",
+        "msoc_care_0"
+    ],
+    "Physical_threat_childhood": [
+        "msoc_hit_period___1",
+        "msoc_hit_period___2",
+        "msoc_att_period___1",
+        "msoc_att_period___2",
+        "msoc_prop_period___1",
+        "msoc_prop_period___2"
+    ],
+    "Psychological_threat_childhood": [
+        "msoc_humi_period___1",
+        "msoc_humi_period___2",
+        "msoc_forb_period___1",
+        "msoc_forb_period___2",
+        "msoc_mon_period___1",
+        "msoc_mon_period___2",
+        "msoc_deman_period___1",
+        "msoc_deman_period___2"
+    ],
+    "Asset_deprivation_adulthood": [
+        "msoc_elec_35",
+        "msoc_wat_35",
+        "msoc_runn_35",
+        "msoc_bath_35",
+        "msoc_line_35",
+        "msoc_ref_35",
+        "msoc_wash_35",
+        "msoc_tv_35",
+        "msoc_rad_35",
+        "msoc_comp_35",
+        "msoc_inter_35",
+        "msoc_smrt_35",
+        "msoc_sound_35",
+        "msoc_car_35",
+        "msoc_bedr_35",
+        "msoc_ob1_35",
+        "msoc_ob2_35",
+        "msoc_ob3_35",
+        "msoc_ob4_35",
+        "msoc_ob5_35"
+    ],
+    "Basic_needs_adulthood": [
+        "msoc_eat_35",
+        "msoc_bal_35",
+        "msoc_bas_35",
+        "msoc_fin_35",
+        "msoc_care_35",
+        "msoc_prov_period___4"
+    ],
+    "Physical_threat_adulthood": [
+        "msoc_hit_period___4",
+        "msoc_att_period___4",
+        "msoc_prop_period___4"
+    ],
+    "Psychological_threat_adulthood": [
+        "msoc_humi_period___4",
+        "msoc_forb_period___4",
+        "msoc_mon_period___4",
+        "msoc_deman_period___4"
+    ],
+    "Asset_deprivation_rec": [
+        "msoc_elec_rec",
+        "msoc_wat_rec",
+        "msoc_runn_rec",
+        "msoc_bath_rec",
+        "msoc_line_rec",
+        "msoc_ref_rec",
+        "msoc_wash_rec",
+        "msoc_tv_rec",
+        "msoc_rad_rec",
+        "msoc_comp_rec",
+        "msoc_inter_rec",
+        "msoc_smrt_rec",
+        "msoc_sound_rec",
+        "msoc_car_rec",
+        "msoc_bedr_rec",
+        "msoc_ob1_rec",
+        "msoc_ob2_rec",
+        "msoc_ob3_rec",
+        "msoc_ob4_rec",
+        "msoc_ob5_rec"
+    ],
+    "Basic_needs_rec": [
+        "msoc_eat_rec",
+        "msoc_bal_rec",
+        "msoc_bas_rec",
+        "msoc_fin_rec",
+        "msoc_care_rec",
+        "msoc_prov_period___7"
+    ],
+    "Physical_threat_rec": [
+        "msoc_hit_period___7",
+        "msoc_att_period___7",
+        "msoc_prop_period___7"
+    ],
+    "Psychological_threat_rec": [
+        "msoc_humi_period___7",
+        "msoc_forb_period___7",
+        "msoc_mon_period___7",
+        "msoc_deman_period___7"
+    ]
+}
