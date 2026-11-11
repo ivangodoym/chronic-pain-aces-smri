@@ -3,12 +3,13 @@ src/features.py
 Feature preparation: Create ACE-related, pain phenotypes and structural neuroimaging features
 """
 from src.config import (
-    ADVERSITY_DOMAINS, ADVERSITY_ITEMS, TEMPORAL_BLOCKS,
+    ADVERSITY_DOMAINS, ADVERSITY_ITEMS, TEMPORAL_BLOCKS, RANDOM_STATE,
     ADVERSITY_DIMENSIONAL_MAP, DATA_PROCESSED_DIR, PAIN_REGIONS
     ) 
 from src.utils import zscore_series, get_brain_regions, print_title
 import pandas as pd 
 import numpy as np 
+from sklearn.decomposition import FactorAnalysis
 
 # ==========================================================
 # CLINICAL VARIABLES
@@ -25,11 +26,13 @@ def calculate_adversity_scores(df: pd.DataFrame) -> pd.DataFrame:
 
     for score_name, subdomains in ADVERSITY_DIMENSIONAL_MAP.items():
         df[f"{score_name}"] = df[subdomains].sum(axis=1)
+    
+    df["Threat_adulthood_any"] = (df["Cumulative_threat_adulthood"] > 0).astype(float)
 
     return df
 
 # ==========================================================
-# PAIN VARIABLES
+# PAIN VARIABLES    
 # ==========================================================
 
 def prepare_pain_outcomes(df: pd.DataFrame) -> pd.DataFrame:
@@ -40,8 +43,28 @@ def prepare_pain_outcomes(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df["n_regions"].notna() & ((df["n_regions"] < 0) | (df["n_regions"] > 17)), "n_regions"] = np.nan
     df.loc[df["CP_1"] == 0, "n_regions"] = 0
 
+    freq_map_weekly = {0: 0.0, 1: 7.0, 2: 1.5, 3: 3.5, 4: 8.0}
+    freq_days = df["CP_Frequency"].map(freq_map_weekly)
+
     df["CP_Frequency"] = df["CP_Frequency"].map({2:1, 3:2, 4:3, 1:4})
-    df.loc[df["CP_Intensity"].notna() & ((df["CP_Intensity"] < 0) | (df["CP_Intensity"] > 10)), "CP_Intensity"] = np.nan 
+    df.loc[df["CP_Intensity"].notna() & ((df["CP_Intensity"] < 0) | (df["CP_Intensity"] > 10)), "CP_Intensity"] = np.nan
+
+    int_01 = (df["CP_Intensity"] / 10.0).clip(0, 1)
+    frq_01 = (freq_days / 8.0).clip(0, 1)
+    sites_01 = (df["n_regions"] / 17.0).clip(0, 1)
+
+    df["Pain_Latent"] = np.nan 
+    pain_mask = (df["CP_1"] == 1) & int_01.notna() & frq_01.notna() & sites_01.notna()
+
+    if pain_mask.sum() > 5:
+        X_pain = np.column_stack([int_01[pain_mask], frq_01[pain_mask], sites_01[pain_mask]])
+        fa = FactorAnalysis(n_components=1, random_state=RANDOM_STATE)
+        latent_scores = fa.fit_transform(X_pain).flatten()
+    
+        if np.corrcoef(latent_scores, int_01[pain_mask].values)[0, 1] < 0:
+            latent_scores = -latent_scores
+
+        df.loc[pain_mask, "Pain_Latent"] = latent_scores
 
     return df
 
@@ -52,14 +75,20 @@ def prepare_pain_outcomes(df: pd.DataFrame) -> pd.DataFrame:
 def prepare_structural_variables(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
-    if "Thalamus_L" in df.columns and "Thalamus_R" in df.columns:
-        df["Thalamus_bilateral"] = df["Thalamus_L"] + df["Thalamus_R"]
-
-    if "Ant_Insula_L" in df.columns and "Ant_Insula_R" in df.columns:
-        df["Ant_Insula_bilateral"] = df["Ant_Insula_L"] + df["Ant_Insula_R"]
-
-    if "Post_Insula_L" in df.columns and "Post_Insula_R" in df.columns:
-        df["Post_Insula_bilateral"] = df["Post_Insula_L"] + df["Post_Insula_R"]
+    brain_structures = [
+        "Thalamus",
+        "Ant_Insula",
+        "Post_Insula",
+        "ParaHippocampal",
+        "Hippocampus",
+        "Cingulum_Ant",
+        "Calcarine"
+    ]
+    
+    for structure in brain_structures: 
+        col_l, col_r = f"{structure}_L", f"{structure}_R"
+        if col_l in df.columns and col_r in df.columns:
+            df[f"{structure}_bilateral"] = df[col_l] + df[col_r]
 
     return df 
 
@@ -73,27 +102,36 @@ def standardize_variables(df: pd.DataFrame, columns_to_zscore: list[str] = None)
     if columns_to_zscore is None:
         brain_cols = get_brain_regions(df.columns)
         bilateral_cols = [
-            c for c in ["Thalamus_bilateral", "Ant_Insula_bilateral", "Post_Insula_bilateral"]
+            c for c in [
+                "Thalamus_bilateral", "Ant_Insula_bilateral", "Post_Insula_bilateral",
+                "ParaHippocampal_bilateral", "Hippocampus_bilateral", "Calcarine_bilateral",
+                "Cingulum_Ant_bilateral"]
             if c in df.columns]
         
         adversity_cols = (
             list(ADVERSITY_DOMAINS.keys()) 
             + 
             list(ADVERSITY_DIMENSIONAL_MAP.keys()) + [f"Cumulative_risk_{s.lower()}" for s in TEMPORAL_BLOCKS]
+            +
+            ["Threat_adulthood_any"]
             )
-        pain_cols = [c for c in ["CP_Intensity", "n_regions"] if c in df.columns]
+        pain_cols = [c for c in ["CP_Intensity", "n_regions", "Pain_Latent"] if c in df.columns]
         covar_cols = [c for c in ["TIV_cm3", "demo_age"] if c in df.columns]
 
         columns_to_zscore = brain_cols + bilateral_cols + adversity_cols + pain_cols + covar_cols
         
+    z_dict = {}
+    valid_cols = [c for c in columns_to_zscore if c in df.columns]
+
     if "_imputation" in df.columns:
-        for col in columns_to_zscore:
-            if col in df.columns: 
-                df[f"{col}_Z"] = df.groupby("_imputation")[col].transform(zscore_series)
+        for col in valid_cols: 
+                z_dict[f"{col}_Z"] = df.groupby("_imputation")[col].transform(zscore_series)
     else: 
-        for col in columns_to_zscore:
-            if col in df.columns:
-                df[f"{col}_Z"] = zscore_series(df[col])
+        for col in valid_cols:
+                z_dict[f"{col}_Z"] = zscore_series(df[col])
+
+    z_df = pd.DataFrame(z_dict, index=df.index)
+    df = pd.concat([df, z_df], axis=1)
 
     return df
 
@@ -103,7 +141,7 @@ def standardize_variables(df: pd.DataFrame, columns_to_zscore: list[str] = None)
 
 def filter_predictors_qc(
     df: pd.DataFrame, candidate_predictors: list[str],
-    max_skew: float = 2.5, max_floor_pct: float = 0.8) -> tuple[list[str], pd.DataFrame]:
+    max_skew: float = 2.5, max_floor_pct: float = 0.85) -> tuple[list[str], pd.DataFrame]:
 
     passed_predictors = []
     qc_records = []
@@ -163,10 +201,11 @@ def run_feature_engineering(
     df_imputed = pd.read_csv(input_path)
     df_ready = apply_feature_pipeline(df_imputed)
 
-    candidate_predictors = [
-        f"{dim}_Z" for dim in ADVERSITY_DIMENSIONAL_MAP.keys()] + [f"Cumulative_risk_{s.lower()}_Z"
-        for s in TEMPORAL_BLOCKS
-    ]
+    candidate_predictors = (
+        [f"{dim}_Z" for dim in ADVERSITY_DIMENSIONAL_MAP.keys()]  
+        + ["Threat_adulthood_any_Z"] 
+        + [f"Cumulative_risk_{s.lower()}_Z" for s in TEMPORAL_BLOCKS]
+    )
 
     passed_predictors, qc_summary = filter_predictors_qc(df_ready, candidate_predictors)
     qc_summary.to_csv(DATA_PROCESSED_DIR / "qc_predictors_report.csv", index=False)

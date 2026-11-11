@@ -8,7 +8,7 @@ from src.config import STRUCTURAL_ROI_PREFIXES, STRUCTURAL_ROI_SUFFIXES, FDR_ALP
 from pathlib import Path 
 import pandas as pd
 import numpy as np
-from scipy.stats import norm
+from scipy.stats import norm, t
 
 # ==========================================================
 # DATA IMPORT & VALIDATION 
@@ -105,16 +105,24 @@ def pool_rubin_scalar(q_list: list[float], se_list: list[float]) -> dict[str, fl
     w = np.mean(se_arr**2)
     b = np.var(q_list, ddof=1) if m > 1 else 0.0 
 
-    t = w + (1 + 1/m) * b
-    se_pool = np.sqrt(t) if t > 0 else 1e-15
+    total = w + (1 + 1/m) * b
+    se_pool = np.sqrt(total) if total > 0 else 1e-15
 
-    z = q_bar / se_pool if se_pool > 0 else 0.0
-    p_val = 2*(1 - norm.cdf(abs(z)))
+    stat = q_bar / se_pool if se_pool > 0 else 0.0
+
+    if b > 0 and w > 0:
+        r = (1.0 + 1.0 / m) * b / w
+        df = (m - 1) * (1.0 + 1.0 / r) ** 2
+        p_val = 2.0 * float(t.sf(abs(stat), df))
+    else: 
+        df = np.inf
+        p_val = 2.0 * float(norm.sf(abs(stat)))
     
     summary = {
         "estimate": float(q_bar),
         "se": float(se_pool),
-        "z": float(z),
+        "z": float(stat),
+        "df": df,
         "p_value": float(p_val)
     }
     

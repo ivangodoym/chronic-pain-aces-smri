@@ -39,10 +39,13 @@ FDR_ALPHA = 0.05
 MAX_ITEM_MISSING = 0.20
 
 # ==========================================================
-# VARIABLES & COVARIABLES DEFINITION
+# VARIABLES & COVARIATES DEFINITION
 # ==========================================================
 
-COVARIATES = ["demo_age", "demo_sex", "TIV_cm3"]
+SITE_REGEX = r"^([A-Za-z]+)"
+SITES_TO_EXCLUDE = ["MA"]
+
+COVARIATES = ["demo_age", "demo_sex", "TIV_cm3", "site"]
 
 PAIN_VARS = {
     "intensity": "CP_Intensity",
@@ -97,3 +100,19 @@ CLINICAL_DIMENSIONAL_VARS = list(ADVERSITY_DIMENSIONAL_MAP.keys())
 
 STRUCTURAL_ROI_SUFFIXES = ("_L", "_R")
 STRUCTURAL_ROI_PREFIXES = ("Vermis_",)
+
+BRAIN_HUBS = {
+    "Salience & Gating": [
+        "Thalamus_bilateral_Z",
+        "Ant_Insula_bilateral_Z",
+        "Post_Insula_bilateral_Z",
+        "Cingulum_Ant_bilateral_Z"
+    ],
+    "Limbic & Stress": [
+        "Hippocampus_bilateral_Z",
+        "ParaHippocampal_bilateral_Z"
+    ],
+    "Negative Control": [
+        "Calcarine_bilateral_Z"
+    ]
+}

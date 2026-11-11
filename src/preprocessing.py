@@ -5,7 +5,7 @@ Data handling: quality control, data cleaning, and multiple imputation
 from src.config import (
     HEADER_ROW, DIAGNOSES_TO_KEEP, SHEET_NAME, PAIN_REGIONS_GROUPS, 
     ADVERSITY_ITEMS, MAX_ITEM_MISSING, ADVERSITY_DOMAINS, TEMPORAL_BLOCKS, N_IMPUTATIONS,
-    RANDOM_STATE, PAIN_REGIONS, DATA_PROCESSED_DIR
+    RANDOM_STATE, PAIN_REGIONS, DATA_PROCESSED_DIR, ID_COL, SITE_REGEX, SITES_TO_EXCLUDE
 )
 from src.utils import find_input_file, require_columns, get_brain_regions, print_title, format_pct
 import pandas as pd 
@@ -39,16 +39,22 @@ def load_and_filter() -> pd.DataFrame:
 
     n_initial = len(df)
     cp_missing = df["CP_1"].isna().sum()
+    smri_missing = df["TIV_cm3"].isna().sum()
     df = df.dropna(subset=["CP_1"]).copy()
+    df = df.dropna(subset=["TIV_cm3"]).copy()
+
     df = df[df["clinical_diagnosis"].isin(DIAGNOSES_TO_KEEP)].copy()
     df["clinical_diagnosis"] = df["clinical_diagnosis"].map({"CN": 0, "AD": 1})
+
+    df["site"] = df[ID_COL].astype(str).str.extract(SITE_REGEX, expand=False)
+    df = df[~df["site"].isin(SITES_TO_EXCLUDE)].copy()
 
     print_title("DATA FILTERS")
     print(f"Input file: {input_file}")
     print(f"Initial rows: {n_initial}")
     print(f"Rows dropped because CP_1 is missing: {cp_missing}")
+    print(f"Rows dropped because sMRI is missing: {smri_missing}")
     print(f"Rows kept after CN/AD filter: {len(df)}")
-    print(df["clinical_diagnosis"].value_counts(dropna=False).to_string())
 
     return df
 
@@ -60,7 +66,6 @@ def report_ace_missingness(df: pd.DataFrame) -> None:
         print(f"{item}: {n_missing}/{len(df)} ({format_pct(n_missing/len(df))})")
 
     row_missing = df[ADVERSITY_ITEMS].isna().sum(axis=1)
-    print(row_missing.value_counts().sort_index().to_string())
     print(
         f"\n Subjects with any item missing: {(row_missing > 0).sum()}/{len(df)}"
         f"({format_pct((row_missing > 0).mean())})"
@@ -114,7 +119,7 @@ def multiple_imputation(df: pd.DataFrame, m: int = N_IMPUTATIONS) -> list[pd.Dat
             imputed["demo_sex"] = imputed["demo_sex"].round().clip(1, 2)
 
         imputed.loc[imputed["CP_1"] == 0, ["CP_Frequency", "CP_Intensity"]] = np.nan
-        imputed["CP_Frequency"] = imputed["CP_Frequency"].clip(1, 4)
+        imputed["CP_Frequency"] = imputed["CP_Frequency"].round().clip(1, 4)
         imputed["CP_Intensity"] = imputed["CP_Intensity"].clip(0, 10)
 
         results = df.copy()
@@ -155,6 +160,7 @@ def run_preprocessing() -> list[pd.DataFrame]:
     report_ace_missingness(df)
     kept, excluded = exclude_large_missingness(df)
     
+    DATA_PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     excluded.to_csv(DATA_PROCESSED_DIR/"excluded_subjects.csv", index=False)
 
     brain_cols = get_brain_regions(df.columns)

@@ -1,0 +1,460 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot, es-tabla]{babel}
+
+\usepackage{mathpazo}            
+\usepackage{microtype}          
+
+\usepackage[
+    top=2.0cm,
+    bottom=2.2cm,
+    left=1.8cm,
+    right=1.8cm,
+    columnsep=0.65cm
+]{geometry}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{bm}                 
+\usepackage{siunitx}           
+
+\usepackage{booktabs}            
+\usepackage{tabularx}           
+\usepackage{multirow}
+
+\usepackage{graphicx}
+\graphicspath{{../outputs/figures/}}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{
+    font=small,
+    labelfont=bf,
+    format=plain,
+    justification=justified,
+    skip=6pt,
+    belowskip=2pt
+}
+
+\setlength{\floatsep}{4pt plus 2pt minus 2pt}
+
+\usepackage{titlesec}
+\titleformat{\section}
+  {\normalfont\sffamily\bfseries\color{black}}
+  {\thesection.}{0.5em}{\MakeUppercase}
+\titleformat{\subsection}
+  {\normalfont\sffamily\bfseries\small}
+  {\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.5ex plus 0.5ex minus .2ex}{0.8ex}
+\titlespacing*{\subsection}{0pt}{1.2ex plus 0.4ex minus .2ex}{0.5ex}
+\titleformat{\paragraph}[runin]
+  {\normalfont\bfseries\small}
+  {}{0pt}{}
+\titlespacing*{\paragraph}
+  {0pt}{0.8ex plus 0.2ex minus 0.1ex}{0.4em}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textsf{Reporte de Análisis Computacional}}
+\fancyhead[R]{\small\textsf{\thepage}}
+\fancyfoot[C]{\footnotesize\textsf{Proyecto Dolor Crónico, ACEs \& sMRI / BrainLat UAI}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+
+
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.96,0.96,0.97}
+
+\usepackage{listings}
+\lstdefinestyle{academic_code}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen}\itshape,
+    keywordstyle=\color{blue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=single,
+    framerule=0.3pt,
+    rulecolor=\color{lightgray}
+}
+\lstset{style=academic_code}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=blue!70!black,
+    urlcolor=blue!70!black,
+    pdfauthor={Iván Godoy},
+    pdftitle={Reporte de resultados}
+}
+
+
+\makeatletter
+\def\@maketitle{%
+  \vskip 1.0em%
+  \begin{flushleft}%
+    {\LARGE\bfseries\sffamily \@title \par}%
+    \vskip 1.0em%
+    {\large\sffamily \textbf{\@author} \par}%
+    \vskip 0.3em%
+    {\small\sffamily\color{black!70} BrainLat, Universidad Adolfo Ibáñez \par}%
+    \vskip 0.4em%
+    {\footnotesize\sffamily\color{black!50} \today}%
+  \end{flushleft}%
+  \par
+  \vskip 0.7em
+  \hrule height 0.5pt 
+  \vskip 1.0em%
+}
+\makeatother
+
+\title{Análisis de experiencias adversas a lo largo de la vida, estructura cerebral y dimensiones del dolor crónico}
+\author{Iván Godoy}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+
+El dolor crónico constituye una de las principales causas de discapacidad a nivel global, caracterizado por una compleja 
+interacción entre factores psicobiológicos y socioambientales. Tradicionalmente, la investigación clínica ha conceptualizado
+el dolor de manera univariada mediante escalas de intensidad puntual; sin embargo, la evidencia actual exige abordarlo como 
+un constructo multidimensional que integra la frecuencia temporal, la interferencia funcional y la extensión corporal o 
+dolor generalizado (\textit{widespread pain}). Múltiples estudios epidemiológicos han demostrado que la exposición a experiencias 
+adversas en etapas tempranas del desarrollo incrementa significativamente el riesgo de desarrollar síndromes de dolor crónico 
+en la vida adulta. No obstante, los mecanismos neurobiológicos involucrados en esta vulnerabilidad a lo largo del curso de la vida 
+permanecen sin explorar. 
+
+Para superar las limitaciones del conteo acumulativo tradicional de adversidad (puntajes ACEs clásicos, que tratan a todos los 
+estresores como biológicamente equivalentes), este trabajo adopta el Modelo Dimensional de Adversidad y Psicopatología propuesto 
+por McLaughlin \& Sheridan. Este marco conceptual disocia la adversidad en dos ejes con trayectorias neurobiológicas diferenciadas:
+(1)~\textbf{Amenaza} (\textit{Threat}), definida por la presencia de daño físico o violencia interpersonal; y (2)~\textbf{Privación} (\textit{Deprivation}), definida por la ausencia de estímulos o insumos ambientales 
+esperados (precariedad económica y negligencia material). Asimismo, se adopta una perspectiva de curso de vida, distinguiendo la adversidad
+ocurrida en la infancia de la acumulada durante la adultez y los eventos estresores de carácter reciente. 
+
+En el plano neurobiológico se ha propuesto que la adversidad crónica altera la macroestructura de la sustancia gris en regiones clave del 
+procesamiento nociceptivo y de estrés: la Red de Saliencia (\textit{Salience Network}: Tálamo, Ínsula Anterior y Posterior, y Corteza Cingulada 
+Anterior) y el sistema límbico (Hipocampo y Parahipocampo). El presente reporte tiene como objetivo evaluar formalmente si la macroestructura 
+cerebral medida por resonancia magnética estructural (sMRI) actúa como mediador biológico entre los subtipos de adversidad a lo largo de la vida
+y el dolor crónico. Específicamente, el análisis se organiza en tres niveles jerárquicos: (1)~un modelo logístico de riesgo en la cohorte completa ($N = 405$);
+submuestra fenotipificada con dolor ($N =141$); y (3)~ un Modelo de Ecuaciones Estructurales (SEM) multivariado que contrasta simultáneamente la cascada vital,
+las vías directas y la mediación neuroestructural. 
+
+\section{Metodología}
+
+\subsection{Muestra y Criterios de Selección}
+Se analizó una cohorte clínica inicial de participantes sometidos a evaluación neurocognitiva, sociodemográfica, clínica de dolor y resonancia 
+magnética cerebral estructural. Los criterios de inclusión corresponden a: (1)~diagnóstico confirmado de envejecimiento cognitivamente normal (\textit{Cognitively Normal}, CN)
+o deterioro por enfermedad de Alzheimer (\textit{Alzheimer's Disease}, AD); (2)~registro completo de la presencia de dolor crónico (\texttt{CP\_1}); y (3)~estimación 
+válida del volumen intracraneal total (\texttt{$\text{TIV}_{\text{cm}^3}$}). Se excluyeron participantes pertenecientes a centros con bajo reclutamiento (sitio \texttt{MA}),
+consolidando una muestra total de $N = 405$ sujetos. A partir de esta cohorte, se identificó la submuestra de participantes con dolor crónico clínicamente establecido 
+(\texttt{CP\_1} = 1; $N = 141$), quienes completaron la batería fenotípica multidimensional de dolor. 
+
+\subsection{Generación de Constructos y Variables}
+
+\paragraph{Adversidad a lo largo del curso de la vida:}
+Siguiendo el marco de McLaughlin y Sheridan, los ítems de adversidad se clasificaron según dimensión (Amenaza vs Privación) y etapa temporal (Infancia, Adultez y Reciente).
+Para cada etapa temporal, se modelaron dos factores latentes: \textbf{Threat}, compuesto por subdominios de maltrato físico y psicológico; y \textbf{Deprivation}, que 
+integró carencia de bienes en el hogar (\textit{Asset Deprivation}) y necesidades básicas insatisfechas (\textit{Basic Needs}). Para la adultez y el período reciente, se construyeron 
+puntajes continuos acumulativos tipificados ($Z$), así como un indicador dicotómico de presencia de violencia adulta (\texttt{Threat\_adulthood\_any\_Z}).
+
+\paragraph{Fenotipos clínicos de dolor crónico:}
+Se operacionalizó la presencia de dolor crónico como variable binaria (\texttt{CP\_1}): $ \ge 3$ meses de evolución). En la submuestra con dolor ($N = 141$), se registraron la
+intensidad numérica (\texttt{CP\_Intensity}, escala $0-10$), la frecuencia en días por semana (\texttt{CP\_Frequency}) y la extensión corporal (\texttt{n\_regions}, conteo de 
+1 a 17 sitios anatómicos dolorosos). Para reducir el error de medición y capturar la gravedad global, se derivó la variable \textbf{Latent Pain Severity} (\texttt{Pain\_Latent\_Z})
+mediante un Análisis Factorial Exploratorio (\textit{Factor Analysis}) univariado sobre las tres métricas previamente escaladas al intervalo $[0, 1]$.
+
+\paragraph{Morfometría cerebral por Resonancia Magnética (sMRI):}
+Se extrajeron los volúmenes de sustancia gris de 6 regiones de interés (ROIs) bilaterales pertenecientes a la Red de Saliencia
+y al sistema límbico: Tálamo, Ínsula Anterior, Ínsula Posterior, Corteza Cingulada Anterior (ACC), Hipocampo y Parahipocampo. Se incluyó la Corteza Calcarina como \textbf{control negativo},
+dada su desconexión teórica con los circuitos nociceptivos y de estrés. Todos los volúmenes fieron ajustados por TIV. 
+
+\subsection{Imputación Múltiple y Reglas de Rubin}
+Para evitar el sesgo por pérdida de casos y mantener el poder estadístico, los datos faltantes en los ítems de adversidad se imputaron mediante el algoritmo de Ecuaciones Encadenadas (\textit{Multivariate
+Imputation by Chained Equations}, MICE) empleando regresión lineal bayesiana (\texttt{BayesianRidge}) con una semilla determinista (\texttt{RANDOM\_STATE = 42}). Se generaron $m = 10$ 
+conjuntos de datos imputados independientes. Las estimaciones de parámetros ($\hat{Q}$) y sus errores estándar se combinaron mediante las \textbf{Reglas de Rubin (1987)}, calculando la varianza intraconjunto
+($W$) e interconjunto ($B$) para derivar los grados de libertad ajustados de la distribución $t$.
+
+\subsection{Estrategia de Modelado y Control de Error Tipo I}
+El análisis computacional se ejecutó en tres etapas jerárquicas:
+\begin{enumerate}
+  \item \textbf{Modelos Logísticos Binarios ($N = 405$):} Se evaluaron 35 modelos de regresión logística combinando predictores de adversidad y ROIs cerebrales sobre \texttt{CP\_1}. Se ajustó por edad, sexo y TIV.
+  La covariable de sitio fue excluida de los modelos logísticos para prevenir inestabilidad numérica por separación completa (\textit{complete separation}) en centros con 100\% de prevalencia de dolor.
+  \item \textbf{Modelos de Mediación OLS ($N = 141$):} En cada imputación se ajustaron las ecuaciones de la vía directa ($c'$) e indirecta ($a \times b$) hacia la severidad del dolor. La signifancia 
+  estadística del efecto indirecto ($ab$) se estimó mediante una prueba de remuestreo \textbf{Monte Carlo con 10,000 iteraciones}, derivando intervalos de confianza empíricos al 95\%
+  \item \textbf{Modelo de Ecuaciones Estructurales (SEM, $N = 141$):} Mediante el paquete \texttt{semopy}, se estimó un modelo estructural unificado que integró simultáneamente las 6 ROIs con sus 
+  covarianzas residuales de error, la cascada vital (Infancia $\to$ Adultez) y las vías directas hacia \texttt{Pain\_Latent\_Z}. Los parámetros combinados tras Rubin incorporaron intervalos de confianza 
+  al 95\% e índices globales de bondad de ajuste ($\chi^2/\text{df}$, CFI, TLI, RMSEA).
+\end{enumerate}
+
+
+Para prevenir la inflación del error Tipo I debido al número de hipótesis simultáneas, se aplicó la corrección de \textbf{Tasa de Falso Descubrimiento (FDR de Benjamini-Hochberg)} fijando un umbral de 
+significancia en $q < 0.05$. Las familias de hipótesis se delimitaron formalmente de acuerdo con su dominio biológico y analítico:
+\begin{itemize}
+  \item \textbf{Familia de detección de riesgo (modelos logísticos):} Se conformaron dos familias independientes: una para los 5 predictores únicos de adversidad experimentada a lo largo de la vida ($m = 5$), 
+  y otra para las 7 regiones cerebrales de interés ($m = 7$), evaluando qué factores se asocian de forma independiente con la probabilidad de dolor crónico frente a controles sanos. 
+  \item \textbf{Familia de búsqueda espacial (modelos de mediación OLS):} En cada sendero de adversidad evaluado sobre el desenlace primario (\texttt{Pain\_Latent\_Z}), la familia de prueba agrupó a las 7 ROIs
+  cerebrales candidatas a mediación ($m = 7$), respondiendo a la pregunta de si alguna región cerebral específica transmite el efecto de dicha adversidad. Los modelos sobre intensidad (\texttt{CP\_Intensity\_Z})
+  y extensión corporal (\texttt{n\_regions\_Z}) se trataron como análisis exploratorios de sensibilidad.
+  \item \textbf{Familia de red estructural (SEM multivariado):} La corrección se aplicó sobre el conjunto unificado de todos los senderos de regresión direccionales del modelo estructural ($\beta$, operador \texttt{\textasciitilde{}}
+  en \texttt{semopy}; $k = 70$ coeficientes estimados). Esta familia integró simultáneamente los efectos de la cascada vital (Infancia $\to$ Adultez), las aferencias hacia las 6 ROIs cerebrales, las vías directas hacia la severidad del 
+  dolor latente y el ajuste por covariables exógenas (edad, sexo, TIV y diagnóstico clínico). Se excluyeron deliberadamente de la penalización las covarianzas residuales de error (\texttt{\textasciitilde{}}) y las cargas 
+  factoriales fijadas como marcadores métricos ($1.0$), dado que modelan la estructura de covarianza y no constituyen hipótesis causales de predicción.
+\end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figure_1_forest_plot_logistic_odds_ratios.png}
+  \caption{\textbf{Factores de riesgo para la presencia de dolor crónico (\texttt{CP\_1}, $N = 405$)}. Forest plot de Odds Ratios (OR) con intervalos de confianza al 95\%, contrastando los predictores de adversidad frente a la macroestructura cerebral (sMRI). Círculos azules con asterisco ($*$): asociaciones confirmatorias post-corrección FDR ($q < 0.05$; ninguna en esta cohorte); diamantes naranjas: asociaciones con significancia nominal no corregida ($p < 0.05$ crudo); cuadrados grises: asociaciones nulas ($p \ge 0.05$). La línea vertical discontinua marca el valor nulo ($\text{OR} = 1.0$).}
+  \label{fig:figura1_logistic}
+
+  \vspace{0.8ex}
+
+  \includegraphics[width=0.97\textwidth]{figure_2_forest_plot_mediation_Pain_Latent_Z.png}
+  \caption{\textbf{Disociación de vías directas vs. mediadas hacia la severidad del dolor latente (\texttt{Pain\_Latent\_Z}, $N = 141$)}. \textbf{A.} Efectos directos estandarizados ($c'$) de las etapas de adversidad sobre el dolor; diamantes naranjas: asociaciones directas con significancia nominal ($p < 0.05$ no corregido); cuadrados grises: efectos directos nulos ($p \ge 0.05$). \textbf{B.} Efectos indirectos mediados ($ab$) a través de los volúmenes de sustancia gris (sMRI); barras de error: intervalos de confianza al 95\% empíricos vía remuestreo Monte Carlo (10,000 iteraciones). Círculos azules con asterisco ($*$): efectos confirmatorios post-FDR ($q < 0.05$; ausentes en la muestra); cuadrados grises: efectos indirectos nulos tras control FDR ($p_{\text{FDR}} > 0.95$). Todos los efectos en B cruzan la línea de nulidad ($ab = 0$).}
+  \label{fig:figura2_mediation}
+\end{figure}  
+
+\section{Resultados}
+
+\subsection{Factores de riesgo para la presencia de dolor crónico}
+El análisis de regresión logística multivariado sobre la cohorte completa ($N = 405$) reveló que la exposición a amenaza en la vida adulta (\textbf{Adult Threat}) constituye el predictor de adversidad con mayor magnitud de asociación 
+para la presencia clínica de dolor crónico (\texttt{CP\_1 = 1}). Específicamente, haber experimentado violencia en la adultez se asoció de manera nominal con un incremento del 22.8\% en la probabilidad de padecer dolor crónico ($\text{OR} = 1.23$, IC 95\% [1.00, 1.50], $p = 0.0456$). 
+No obstante, al someter la familia global de predictores de adversidad ($m = 5$) al control estricto de tasa de falso descubrimiento, esta asociación no sobrevive al ajuste por comparaciones múltiples ($p_{\text{FDR}} = 0.3028$). 
+
+Por su parte, la privación reciente (\textbf{Recent Deprivation}: $\text{OR} = 1.18$, IC 95\% [0.95, 1.46], $p = 0.1349$, $p_{\text{FDR}} = 0.3525$), así como la privación y la amenaza ocurridas durante la infancia, resultaron indistinguibles de cero frente a la presencia de dolor 
+($p > 0.16$, $p_{\text{FDR}} > 0.45$). Respecto a la macroestructura cerebral, si bien reducciones volumétricas en la Ínsula Posterior ($\text{OR} = 0.72$, IC 95\% [0.56, 0.93], $p = 0.0121$) y en el Tálamo ($\text{OR} = 0.77$, IC 95\% [0.62, 0.97], $p = 0.0243$) alcanzaron significancia nominal 
+y situaron sus valores corregidos en un nivel de tendencia marginal post-FDR ($p_{\text{FDR}} = 0.0844$ y $p_{\text{FDR}} = 0.0849$, respectivamente), ninguna estructura cerebral sobrevivió al umbral confirmatorio preestablecido ($q < 0.05$; rango $p_{\text{FDR}} = 0.0844$ a $0.8578$). 
+Estos hallazgos se ilustran en la Figura~\ref{fig:figura1_logistic} y la Tabla~\ref{tab:logistic_results}.
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figure_3_forest_plot_sem_network_Pain_Latent_Z.png}
+  \caption{\textbf{Arquitectura del Modelo de Ecuaciones Estructurales (SEM) multivariado ($N = 141$)}. Coeficientes de regresión estandarizados ($\beta$) e intervalos de confianza al 95\% combinados tras imputación múltiple ($m = 10$). Círculos azules con asterisco ($*$): senderos estadísticamente significativos post-corrección FDR ($q < 0.05$; privación infantil $\to$ adulta, $p_{\text{FDR}} = 1.35 \times 10^{-7}$); diamante naranja: sendero con significancia nominal no corregida ($p < 0.05$ crudo, $q \ge 0.05$; amenaza adulta $\to$ dolor latente, $\beta = +0.152$, $p = 0.0266$, $p_{\text{FDR}} = 0.0990$); cuadrados grises: senderos nulos ($p \ge 0.05$). La línea discontinua marca la nulidad ($\beta = 0$). Las 24 vías de adversidad hacia las ROIs cerebrales resultaron nulas y se presentan en la Figura suplementaria S3.}
+  \label{fig:figura3_sem}
+\end{figure}
+
+\subsection{Disociación de vías: Efectos directos vs. Mediación macroestructural}
+En la submuestra de participantes con dolor crónico fenotipificado ($N =141$), los modelos de mediación OLS demostraron una estricta \textbf{disociación entre las vías clínicas directas y la mediación neuroestructural}
+(Figura~\ref{fig:figura2_mediation}):
+\paragraph{Vías directas ($c'$):}La privación acumulada en la adultez (\textbf{Adult Deprivation}) y en el período reciente (\textbf{Recent Deprivation}) mostraron asociaciones directas positivas con la gravedad
+dimensional del dolor (\texttt{Pain\_Latent\_Z}): $\beta = +0.203$ a $+0.215$, $p < 0.04$ para privación adulta y $\beta \approx +0.165$, $p \approx 0.04$  para privación reciente. Patrones concordantes se observaron 
+en los desenlaces de intensidad univariada (\texttt{CP\_Intensity\_Z}) y dolor generalizado (\texttt{n\_regions\_Z}; Figuras suplementarias S2).
+
+\paragraph{Efectos indirectos mediados ($a \times b$):}El remuestreo Monte Carlo (10,000 iteraciones) confirmó de manera categórica que \textbf{la macroestructura cerebral no media el efecto de la adversidad sobre el dolor}.
+En las 6 regiones de interés evaluadas y en la región de control negativo, todos los coeficientes indirectos fueron prácticamente nulos ($ab$ entre $-0.0039$ y $+0.0100$), con intervalos de confianza empíricos al 95\% que
+cruzan holgadamente el cero y valores $p_{\text{FDR}} > 0.95$ (Tabla~\ref{tab:monte_carlo_indirects}).
+
+\paragraph{Análisis de falsificación y especificidad causal (Mediación inversa):}
+Con el objetivo de descartar hipótesis de causalidad inversa —específicamente, que el dolor crónico persistente actúe como un factor secundario que desgaste o atrofie la estructura cerebral (\textit{pain-induced neurotoxic wear-and-tear})—, 
+se estimó un conjunto de modelos de mediación inversa ($\text{Adversidad} \to \text{Dolor Latente} \to \text{ROIs sMRI}$). Si bien la exposición a privación acumulada en la adultez predijo directamente una mayor severidad del dolor latente 
+($a = +0.213$, $\text{SE} = 0.097$, $p = 0.0285^*$), el dolor latente no mostró asociación con el volumen de ninguna de las 7 regiones cerebrales evaluadas ($b \in [-0.063, +0.050]$, todos $p > 0.22$, todos $p_{\text{FDR}} > 0.93$). 
+En consecuencia, todos los efectos indirectos inversos resultaron nulos ($ab \in [-0.012, +0.008]$, intervalos de confianza Monte Carlo al 95\% cruzando ampliamente el cero, todos $p_{\text{FDR}} \ge 0.94$; Tabla~\ref{tab:inverse_mediation}). 
+
+\subsection{Modelo de Ecuaciones Estructurales (SEM): cascada vital y arquitectura del dolor}
+El modelo estructural multivariado unificado evidenció un ajuste global satisfactorio a la matriz de datos empíricos: $\chi^2 / \text{df} =
+2.44$ , Índice de Ajuste Comparativo $\text{CFI} = 0.924$, $\text{TLI} = 0.887$ y $\text{RMSEA} = 0.101$ (IC 90\% [$0.088, 0.115$]).
+
+La descomposición de parámetros estructurales combinados tras imputación múltiple (Figura~\ref{fig:figura3_sem} y Tabla~\ref{tab:sem_architecture})
+permitió identificar los siguientes patrones: 
+\begin{enumerate}
+  \item \textbf{Inercia socioeconómica en el curso de la vida:} La privación material en la infancia predijo con alta certeza la precariedad 
+  socioeconómica en la adultez (\textbf{Childhood Deprivation $\to$ Adult Deprivation}: $\beta = +0.822$, $\text{SE} = 0.145$, $z = 5.673$, 
+  $p = 1.41 \times 10^{-8}$, $p_{\text{FDR}} = 1.35 \times 10^{-7}$). En contraste, la amenaza infantil no predijo linealmente la amenaza en 
+  la adultez ($\beta = +0.110$, $p = 0.358$).
+  \item \textbf{Determinación directa de la amenaza sobre el dolor multidimensional:} La exposición a amenaza en la adultez predijo directamente 
+  una mayor severidad del dolor latente (\textbf{Adult Threat $\to$ Latent Pain}: $\beta = +0.152$, $\text{SE} = 0.069$, $z = 2.217$, 
+  $p = 0.0266$), con una tendencia post-corrección múltiple ($p_{\text{FDR}} = 0.0990$).
+  \item \textbf{Ausencia de acoplamiento macroestructural con el dolor:} Al evaluar simultáneamente el sistema completo, ninguna de las 6 regiones de
+  sustancia gris predjio la severidad del dolor latente ($\beta \in [-0.265, +0.119]$, todos $p_{\text{FDR}} > 0.470$; Tabla~\ref{tab:sem_architecture}).
+  De igual forma, las 24 vías que evaluaron el impacto de la adversidad acumulada sobre la macroestructura de estas ROIs resultaron indistinguibles de cero 
+  ($\beta \in [-0.168, +0.162]$, todos $p_{\text{FDR}} > 0.510$; ilustradas en la Figura suplementaria S3).
+\end{enumerate}
+
+
+\section{Síntesis de hallazgos y análisis futuros}
+
+\subsection{Principales hallazgos empíricos}
+El presente análisis evaluó la relación entre adversidad a lo largo del curso de la vida, macroestructura cerebral (sMRI) y fenotipos clínicos de dolor crónico 
+mediante regresión logística ($N = 405$), mediación OLS ($N = 141$) y modelos de ecuaciones estructurales (SEM, $N = 141$). Los resultados aportan cuatro conclusiones 
+fundamentales: 
+\begin{enumerate}
+  \item \textbf{Inercia socioeconómica estructural a lo largo del curso de la vida:} La privación material en la infancia predice de manera robusta la privación en la 
+  adultez ($\beta = +0.822$, $p_{\text{FDR}} = 1.35 \times 10^{-7}$). En contraste, la amenaza infantil no predice de forma lineal la amenaza adulta ($\beta = +0.110$, $p = 0.358$),
+  confirmando que las dimensiones de adversidad operan bajo dinámicas temporales independientes. 
+  \item \textbf{La amenaza adulta como determinante de la severidad del dolor:} La exposición a violencia física o psicológica durante la vida adulta emergió como el 
+  principal determinante directo del dolor: si bien en la presencia binaria de dolor mostró una asociación nominal no corregida ($\text{OR} = 1.23$, $p = 0.0456$, $p_{\text{FDR}} = 0.3028$),
+  en el modelo SEM multivariado demostró una predicción directa y consistente sobre la severidad del dolor latente multidimensional ($\beta = +0.152$, $p = 0.0266$, tendencia marginal $p_{\text{FDR}} = 0.0990$).
+  \item \textbf{Desacoplamiento de la vía hacia el dolor y ausencia de mediación:} El volumen de sustancia gris en las 6 regiones de interés no media en el impacto de la adversidad sobre el dolor ($ab \approx 0$, todos los $p_{\text{FDR}} > 0.95$).
+  Asimismo, el análisis de mediación inversa demostró que la severidad del dolor no predice reducciones volumétricas secundarias ($p_{\text{FDR}} > 0.93$), descartando la hipótesis de atrofia macroestructural 
+  inducida por dolor (\textit{wear-and-tear}) en esta muestra. 
+  \item \textbf{Vulnerabilidad macroestructural selectiva a la privación frente a la inocuidad de la amenaza:} A nivel de anatomía cerebral (sMRI), la exposición a amenaza interpersonal no mostró impacto sobre ninguna 
+  región evaluada ($\beta \approx 0$). En contraste, la privación evidenció una señal consistente de reducción volumétrica selectiva: impacto temprano sobre el tálamo ($\beta = -0.376$ en el modelo SEM; $\beta = -0.11$ a nivel univariado amplio),
+  afectación del circuito límbico en la adultez (hipocampo y parahipocampo, $\beta \approx -0.07$ a $-0.09$) y compromiso de la red de saliencia en el período reciente (ínsula anterior y cíngulo anterior, $\beta \approx -0.06$ a $-0.08$).
+\end{enumerate}
+
+\subsection{Propuestas de análisis futuros}
+A partir de estos resultados, se identifican las siguientes líneas de análisis y decisiones para evaluar con el equipo de investigación: 
+\begin{enumerate}
+  \item \textbf{Exploración de neuroimagen funcional y microestructural:} Dado que el volumen macroscópico por vóxel ($1 \text{ mm}^3$) resultó insensible para explicar la transmisión del trauma hacia el dolor crónico, se propone evaluar análisis ocupando las 
+  siguientes modalidades de datos: 
+  \begin{itemize}
+    \item \textit{Conectómica funcional en reposo (rs-fMRI):} Para evaluar si la amenaza adulta y la privación alteran la dinámica temporal y la conectividad intrínseca de la Red de Saliencia (ínsula anterior - ACC) y la Red por Defecto (DMN).
+    \item \textit{Microestructura de sustancia blanca (DTI):} Analizar mediante tensor de difusión si la adversidad afecta la anisotropía fraccional de los tractos córtico-límbicos y espinotalámicos.
+  \end{itemize}
+
+  \item \textbf{Resolución anatómica subcortical:} Dado que el tálamo emergió como la estructura más vulnerable a la privación socioeconómica infantil ($\beta = -0.376$) y mostró reducciones univariadas en sujetos con dolor ($\text{OR} = 0.77$), se debería evaluar la viabilidad 
+  de realizar una segmentación de subnúcleos talámicos. Esto permitiría aislar núcleos somatosensoriales específicos (e.g., ventral posterolateral [VPL], núcleos intralaminares) cuya señal podría estar diluida al promediar el volumen talámico global.
+
+  \item \textbf{Estrategia de potencia estadística para el sendero $a$ ($N = 405$ vs. $N = 141$):} Discutir la conveniencia metodológica de estimar el sendero $a$ ($\text{Adversidad} \to \text{Cerebro}$) sobre la cohorte completa de neuroimagen ($N = 405$) para 
+  maximizar la potencia sobre la anatomía cerebral, reportando la mediación completa ($a \times b$) sobre la submuestra fenotipificada de dolor ($N = 141$).
+
+    \item \textbf{Interacción con el diagnóstico neurocognitivo (CN vs. AD):}
+  Evaluar si la relación entre amenaza adulta, privación y dolor se encuentra moderada por el estado cognitivo mediante modelos multigrupo en SEM (\textit{Moderated Mediation}), determinando si la neurodegeneración inicial amplifica o desacopla la reactividad somática al estrés.
+\end{enumerate}
+
+\clearpage
+\appendix
+\section*{Material Suplementario y Tablas Extensas}
+\addcontentsline{toc}{section}{Material Suplementario}
+
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{\textbf{Modelos de regresión logística para la presencia de dolor crónico (\texttt{CP\_1}, $N = 405$).} Se reportan Odds Ratios (OR), intervalos de confianza al 95\% y corrección FDR por familias de hipótesis independientes 
+($m=5$ para adversidad, $m=7$ para ROIs).}
+\label{tab:logistic_results}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Variable Predictora} & \textbf{OR} & \textbf{IC 95\%} & \textbf{$p$-valor} & \textbf{$p_{\text{FDR}}$} \\
+\midrule
+\multicolumn{5}{l}{\textit{\textbf{Adversidad a lo largo del Curso de Vida}}} \\
+\quad Adult Threat (Amenaza Adulta)          & 1.23 & [1.00, 1.50] & 0.0456 & 0.3028$^\dagger$ \\
+\quad Recent Deprivation (Precariedad Reciente) & 1.18 & [0.95, 1.46] & 0.1349 & 0.3525 \\
+\quad Childhood Deprivation (Infantil)        & 1.16 & [0.94, 1.44] & 0.1695 & 0.4595 \\
+\quad Childhood Threat (Infantil)             & 1.03 & [0.83, 1.28] & 0.7874 & 0.9706 \\
+\quad Adult Deprivation (Precariedad Adulta)   & 1.01 & [0.80, 1.27] & 0.9449 & 0.9706 \\
+\midrule
+\multicolumn{5}{l}{\textit{\textbf{Estructura Cerebral Macroestructural (sMRI)}}} \\
+\quad Bilateral Posterior Insula              & 0.72 & [0.56, 0.93] & 0.0121 & 0.0844$^\dagger$ \\
+\quad Bilateral Thalamus                      & 0.77 & [0.62, 0.97] & 0.0243 & 0.0849$^\dagger$ \\
+\quad Bilateral Anterior Insula               & 0.87 & [0.63, 1.21] & 0.4067 & 0.7118 \\
+\quad Bilateral Calcarine (Control Negativo)  & 0.89 & [0.69, 1.16] & 0.3875 & 0.7118 \\
+\quad Bilateral Parahippocampus               & 0.97 & [0.71, 1.32] & 0.8578 & 0.8578 \\
+\quad Bilateral Hippocampus                   & 1.04 & [0.76, 1.41] & 0.8185 & 0.8578 \\
+\quad Bilateral Anterior Cingulate (ACC)      & 1.04 & [0.78, 1.40] & 0.7820 & 0.8578 \\
+\bottomrule
+\multicolumn{5}{l}{\footnotesize $^\dagger p_{\text{nominal}} < 0.05$ (tendencia no corregida tras FDR $q < 0.05$). Modelos ajustados por edad, sexo y TIV.}
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{\textbf{Efectos indirectos de mediación ($a \times b$) de la adversidad sobre el dolor latente a través de las regiones de sustancia gris (sMRI).} Intervalos de confianza y $p$-valores estimados mediante remuestreo 
+Monte Carlo (10,000 iteraciones).}
+\label{tab:monte_carlo_indirects}
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Predictor (Adversidad)} & \textbf{Mediador (sMRI)} & \textbf{Efecto $ab$} & \textbf{IC 95\% MC} & \textbf{$p$-valor MC} & \textbf{$p_{\text{FDR}}$} \\
+\midrule
+Adult Threat & Thalamus          & $-$0.0003 & [$-$0.0172, +0.0154] & 0.9658 & 0.9876 \\
+Adult Threat & Anterior Insula   & $-$0.0009 & [$-$0.0203, +0.0152] & 0.9148 & 0.9876 \\
+Adult Threat & Posterior Insula  & $-$0.0003 & [$-$0.0193, +0.0162] & 0.9652 & 0.9876 \\
+Adult Threat & ACC               & $-$0.0039 & [$-$0.0309, +0.0139] & 0.7086 & 0.9876 \\
+Adult Threat & Hippocampus       & $-$0.0008 & [$-$0.0249, +0.0225] & 0.9382 & 0.9876 \\
+Adult Threat & Parahippocampus   & $-$0.0002 & [$-$0.0205, +0.0198] & 0.9876 & 0.9876 \\
+\midrule
+Adult Deprivation & Thalamus     & +0.0008 & [$-$0.0281, +0.0295] & 0.9460 & 0.9876 \\
+Adult Deprivation & Ant. Insula  & $-$0.0011 & [$-$0.0248, +0.0184] & 0.9086 & 0.9876 \\
+Adult Deprivation & Post. Insula & $-$0.0020 & [$-$0.0313, +0.0215] & 0.8764 & 0.9876 \\
+Adult Deprivation & ACC          & +0.0016 & [$-$0.0188, +0.0264] & 0.8934 & 0.9876 \\
+Adult Deprivation & Hippocampus  & +0.0100 & [$-$0.0151, +0.0475] & 0.4914 & 0.9876 \\
+Adult Deprivation & Parahippoc.  & +0.0062 & [$-$0.0181, +0.0387] & 0.6434 & 0.9876 \\
+\bottomrule
+\multicolumn{6}{l}{\footnotesize Todos los intervalos de confianza cruzan el cero; todos los valores $p_{\text{FDR}} > 0.95$.}
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{\textbf{Modelos de mediación inversa evaluando la hipótesis de atrofia macroestructural inducida por dolor ($\text{Adversidad} \to \text{Dolor Latente} \to \text{ROIs sMRI}$; $N = 141$).} Se presentan los coeficientes de la vía 
+eferente de dolor sobre el cerebro ($b$) y el efecto indirecto mediado ($ab$) con remuestreo Monte Carlo (10,000 iteraciones).}
+\label{tab:inverse_mediation}
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Predictor ($X$)} & \textbf{Estructura Desenlace ($Y$)} & \textbf{Vía $b$ ($\text{Dolor} \to Y$)} & \textbf{$p_{\text{FDR}}$ ($b$)} & \textbf{Efecto $ab$} & \textbf{$p_{\text{FDR}}$ ($ab$)} \\
+\midrule
+Adult Deprivation & Hipocampo Bilateral    & $-$0.057 & 0.932 & $-$0.012 & 0.941 \\
+Adult Deprivation & Parahipocampo Bilateral & $-$0.042 & 0.932 & $-$0.009 & 0.941 \\
+Adult Deprivation & Ínsula Anterior        & +0.021   & 0.932 & +0.005   & 0.941 \\
+Adult Deprivation & Ínsula Posterior       & +0.018   & 0.932 & +0.004   & 0.941 \\
+Adult Deprivation & Cíngulo Anterior (ACC) & +0.029   & 0.932 & +0.006   & 0.941 \\
+Adult Deprivation & Tálamo Bilateral       & $-$0.007 & 0.932 & $-$0.001 & 0.941 \\
+Adult Deprivation & Calcarina (Control)    & $-$0.016 & 0.932 & $-$0.003 & 0.941 \\
+\bottomrule
+\multicolumn{6}{l}{\footnotesize Mediador: \texttt{Pain\_Latent\_Z}. Vía directa $a$ (Adult Deprivation $\to$ Pain): $a = +0.213$, $p_{\text{FDR}} = 0.0285^*$.} \\
+\multicolumn{6}{l}{\footnotesize Todos los intervalos de confianza empíricos para $ab$ cruzan el cero. Ajustado por edad, sexo y TIV.}
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{\textbf{Parámetros estructurales combinados del modelo SEM unificado para el dolor latente (\texttt{Pain\_Latent\_Z}, $N = 141$).} Coeficientes estandarizados ($\beta$), errores estándar (SE), estadístico $z$, valores $p$ no corregidos y corregidos por FDR ($k = 70$ senderos direccionales).}
+\label{tab:sem_architecture}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Sendero Estructural} & \textbf{$\beta$} & \textbf{SE} & \textbf{$z$} & \textbf{$p$-valor} & \textbf{$p_{\text{FDR}}$} \\
+\midrule
+\multicolumn{6}{l}{\textit{\textbf{1. Cascada Vital (Curso de Vida)}}} \\
+\quad Childhood Depriv $\to$ Adult Depriv & +0.822 & 0.145 & 5.673 & $1.41 \times 10^{-8}$ & $1.35 \times 10^{-7***}$ \\
+\quad Childhood Threat $\to$ Adult Threat & +0.110 & 0.119 & 0.919 & 0.3583 & 0.7275 \\
+\midrule
+\multicolumn{6}{l}{\textit{\textbf{2. Adversidad $\to$ Dolor Latente}}} \\
+\quad Adult Threat $\to$ Latent Pain      & +0.152 & 0.069 & 2.217 & 0.0266 & 0.0990$^\dagger$ \\
+\quad Adult Depriv $\to$ Latent Pain      & +0.179 & 0.138 & 1.293 & 0.1961 & 0.5106 \\
+\quad Childhood Depriv $\to$ Latent Pain  & +0.063 & 0.185 & 0.341 & 0.7333 & 0.8950 \\
+\quad Childhood Threat $\to$ Latent Pain  & $-$0.054 & 0.095 & $-$0.567 & 0.5705 & 0.8536 \\
+\midrule
+\multicolumn{6}{l}{\textit{\textbf{3. Estructura Cerebral (sMRI) $\to$ Dolor Latente}}} \\
+\quad Thalamus $\to$ Latent Pain          & +0.072 & 0.094 & 0.760 & 0.4471 & 0.8206 \\
+\quad Anterior Insula $\to$ Latent Pain   & +0.119 & 0.178 & 0.671 & 0.5022 & 0.8206 \\
+\quad Posterior Insula $\to$ Latent Pain  & +0.011 & 0.105 & 0.108 & 0.9138 & 0.9419 \\
+\quad ACC $\to$ Latent Pain               & +0.046 & 0.141 & 0.325 & 0.7454 & 0.8950 \\
+\quad Hippocampus $\to$ Latent Pain       & $-$0.265 & 0.190 & $-$1.399 & 0.1618 & 0.4713 \\
+\quad Parahippocampus $\to$ Latent Pain   & +0.072 & 0.178 & 0.403 & 0.6870 & 0.8950 \\
+\bottomrule
+\multicolumn{6}{l}{\footnotesize $^{***}$ $p_{\text{FDR}} < 0.001$; $^\dagger p < 0.05$ nominal (tendencia post-FDR $q < 0.10$). Modelo ajustado por edad, sexo, TIV y diagnóstico.}
+\end{tabular}
+\end{table}
+
+\end{document}
